@@ -1,5 +1,7 @@
 # React + TypeScript + Vite
 
+Тестовое задание: Приложение для отображение погоды в графиках
+
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
 Currently, two official plugins are available:
