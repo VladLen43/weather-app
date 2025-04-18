@@ -1,14 +1,9 @@
 import { lazy, Suspense } from 'react'
 import { ProtectedLayout } from '../app/ProtectedLayout/index.tsx'
-import { NotFoundPage } from '../pages/NotFoundPage/index.tsx'
 
-const LazyAppPage = lazy(() => import('../app/App.tsx').then((module) => ({ default: module.default })))
-const LazyLoginPage = lazy(() =>
-  import('../pages/LoginPage/index.tsx').then((module) => ({ default: module.LoginPage })),
-)
-const LazyChartsPage = lazy(() =>
-  import('../pages/ChartsPage/index.tsx').then((module) => ({ default: module.ChartsPage })),
-)
+const LazyAppPage = lazy(() => import('../app/PageWrapper.tsx'))
+const LazyLoginPage = lazy(() => import('../pages/LoginPage/index.tsx'))
+const LazyNotFoundPage = lazy(() => import('../pages/NotFoundPage/index.tsx'))
 
 export const routes = [
   {
@@ -28,19 +23,9 @@ export const routes = [
         </Suspense>
       </ProtectedLayout>
     ),
-    children: [
-      {
-        path: 'charts',
-        element: (
-          <Suspense fallback="Loading...">
-            <LazyChartsPage />
-          </Suspense>
-        ),
-      },
-    ],
   },
   {
     path: '*',
-    element: <NotFoundPage />,
+    element: <LazyNotFoundPage />,
   },
 ]

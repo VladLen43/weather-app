@@ -1,16 +1,19 @@
 import { useState } from 'react'
-import { Box, Button, FormControl, FormHelperText, TextField, Typography, useTheme } from '@mui/material'
-import { Controller, useForm } from 'react-hook-form'
+import { Box, Button, FormHelperText, TextField, Typography, useTheme } from '@mui/material'
+import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { ChangeThemeButton } from '../../shared/ChangeThemeButton'
 import classes from './Login.module.scss'
+import { getMockData } from '../../utils'
 
 interface IFormInputs {
   userName: string
   password: string
 }
+
 export const Login = () => {
   const [error, setError] = useState('')
+
   const navigate = useNavigate()
   const location = useLocation()
 
@@ -18,18 +21,18 @@ export const Login = () => {
 
   const from = location.state?.from?.pathname || '/'
 
-  const { handleSubmit, control, getValues } = useForm<IFormInputs>({
+  const { handleSubmit, control } = useForm<IFormInputs>({
     defaultValues: {
       userName: '',
       password: '',
     },
+    mode: 'onSubmit',
   })
 
-  const onSubmit = () => {
+  const onSubmit: SubmitHandler<IFormInputs> = ({ userName, password }) => {
     setError('')
-    const { userName, password } = getValues()
     if (userName === 'admin' && password === 'admin') {
-      const exampleToken = 'jwt-token-example' + Math.random().toString(36).slice(2)
+      const exampleToken = getMockData()
       localStorage.setItem('authToken', exampleToken)
       navigate(from, { replace: true })
     } else {
@@ -38,15 +41,7 @@ export const Login = () => {
   }
 
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        minHeight: '100vh',
-        backgroundColor: theme.palette.background.paper,
-      }}
-    >
+    <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh" bgcolor="background.paper">
       <Box
         sx={{
           p: 4,
@@ -90,17 +85,15 @@ export const Login = () => {
             control={control}
             rules={{ required: 'Обязательное поле' }}
             render={({ field, fieldState: { error } }) => (
-              <FormControl fullWidth>
-                <TextField
-                  {...field}
-                  label="Имя пользователя"
-                  variant="outlined"
-                  size="small"
-                  error={!!error}
-                  helperText={error?.message}
-                  fullWidth
-                />
-              </FormControl>
+              <TextField
+                {...field}
+                label="Имя пользователя"
+                variant="outlined"
+                size="small"
+                error={!!error}
+                helperText={error?.message}
+                fullWidth
+              />
             )}
           />
 
@@ -109,18 +102,16 @@ export const Login = () => {
             control={control}
             rules={{ required: 'Обязательное поле' }}
             render={({ field, fieldState: { error } }) => (
-              <FormControl fullWidth>
-                <TextField
-                  {...field}
-                  label="Пароль"
-                  type="password"
-                  variant="outlined"
-                  size="small"
-                  error={!!error}
-                  helperText={error?.message}
-                  fullWidth
-                />
-              </FormControl>
+              <TextField
+                {...field}
+                label="Пароль"
+                type="password"
+                variant="outlined"
+                size="small"
+                error={!!error}
+                helperText={error?.message}
+                fullWidth
+              />
             )}
           />
 

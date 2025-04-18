@@ -1,4 +1,4 @@
-import { blue, grey, indigo } from '@mui/material/colors'
+import { blue, grey, indigo, orange } from '@mui/material/colors'
 import { createTheme } from '@mui/material/styles'
 
 declare module '@mui/material/styles' {
@@ -14,10 +14,6 @@ declare module '@mui/material/styles' {
   }
 }
 
-export const defaultTheme = createTheme({
-  palette: {},
-})
-
 export const lightTheme = createTheme({
   palette: {
     mode: 'light',
@@ -29,7 +25,13 @@ export const lightTheme = createTheme({
     secondary: {
       main: indigo[500],
       light: indigo[100],
-      dark: indigo[800],
+      dark: indigo[600],
+    },
+    info: {
+      main: grey[700],
+    },
+    warning: {
+      main: orange[600],
     },
     background: {
       paper: grey[200],
@@ -43,11 +45,18 @@ export const darkTheme = createTheme({
     primary: {
       main: blue[200],
       light: blue[100],
+      dark: blue[500],
     },
     secondary: {
-      main: indigo[500],
+      main: indigo[300],
       light: indigo[300],
       dark: indigo[800],
+    },
+    info: {
+      main: grey[300],
+    },
+    warning: {
+      main: orange[400],
     },
     background: {
       default: '#293133',

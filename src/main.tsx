@@ -3,13 +3,13 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { routes } from './routes/index.tsx'
-import { AppThemeProvider } from './app/theme/ThemeProvider.tsx'
+import { ThemeProvider } from './app/theme/ThemeProvider.tsx'
 const router = createBrowserRouter(routes)
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <AppThemeProvider>
+    <ThemeProvider>
       <RouterProvider router={router} />
-    </AppThemeProvider>
+    </ThemeProvider>
   </StrictMode>,
 )

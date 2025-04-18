@@ -1,9 +1,9 @@
-import classes from './App.module.scss'
+import classes from './PageWrapper.module.scss'
 import { Header } from '../features/Header'
-import { Outlet } from 'react-router-dom'
 import { CssBaseline, GlobalStyles } from '@mui/material'
+import { Charts } from '../features/Charts'
 
-function App() {
+function PageWrapper() {
   return (
     <>
       <CssBaseline />
@@ -16,10 +16,10 @@ function App() {
       />
       <div className={classes.container}>
         <Header />
-        <Outlet />
+        <Charts />
       </div>
     </>
   )
 }
 
-export default App
+export default PageWrapper

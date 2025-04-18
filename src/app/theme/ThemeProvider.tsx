@@ -1,5 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
-import React, { createContext, useContext, useMemo, useState } from 'react'
+import { createContext, JSX, ReactNode, useContext, useMemo, useState } from 'react'
 import { ThemeProvider as MuiThemeProvider } from '@mui/material/styles'
 import { darkTheme, lightTheme } from './theme'
 
@@ -17,7 +17,7 @@ export const ThemeContext = createContext<ThemeContextType>({
 
 export const useThemeContext = () => useContext(ThemeContext)
 
-export const AppThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const ThemeProvider = ({ children }: { children: ReactNode }): JSX.Element => {
   const [mode, setMode] = useState<ThemeMode>(() => {
     return (localStorage.getItem('theme') as ThemeMode) || 'light'
   })
