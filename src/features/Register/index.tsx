@@ -3,53 +3,66 @@ import { Box, Button, FormHelperText, TextField, Typography, useTheme, Link } fr
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom'
 import { ChangeThemeButton } from '../../shared/ChangeThemeButton'
-import classes from './Login.module.scss'
+import classes from './Register.module.scss'
 import bcrypt from 'bcryptjs'
-import { User } from '../../types/types'
 import { getMockData } from '../../utils'
+import { User } from '../../types/types'
 
 interface IFormInputs {
   userName: string
   password: string
+  confirmPassword: string
 }
 
-export const Login = () => {
+export const Register = () => {
   const [error, setError] = useState('')
-
   const navigate = useNavigate()
   const location = useLocation()
-
   const theme = useTheme()
+  const from = location?.state?.from?.pathname || '/'
 
-  const from = location.state?.from?.pathname || '/'
-
-  const { handleSubmit, control } = useForm<IFormInputs>({
+  const { handleSubmit, control, watch } = useForm<IFormInputs>({
     defaultValues: {
       userName: '',
       password: '',
+      confirmPassword: '',
     },
     mode: 'onSubmit',
   })
 
   const onSubmit: SubmitHandler<IFormInputs> = async ({ userName, password }) => {
     setError('')
-    const users = JSON.parse(localStorage.getItem('users') || '[]') as User[]
-    const user = users.find((u: User) => u.userName === userName)
-    const token = getMockData()
 
-    if (!user) {
-      setError('Пользователь не найден')
+    const existingUsers = JSON.parse(localStorage.getItem('users') || '[]') as User[]
+    const userExists = existingUsers.some((user: User) => user.userName === userName)
+
+    if (userExists) {
+      setError('Пользователь с таким именем уже существует')
       return
     }
 
-    const isPasswordValid = await bcrypt.compare(password, user.password)
-    if (!isPasswordValid) {
-      setError('Неверный пароль')
-      return
-    }
+    // сгенерировал хэш для пароля чтобы безопасно хранить его в localStorage
 
-    localStorage.setItem('authToken', token)
-    navigate(from, { replace: true })
+    try {
+      const salt = await bcrypt.genSalt(10)
+      const hashedPassword = await bcrypt.hash(password, salt)
+
+      const token = getMockData()
+
+      const newUser = {
+        userName,
+        password: hashedPassword,
+      }
+
+      localStorage.setItem('users', JSON.stringify([...existingUsers, newUser]))
+      localStorage.setItem('authToken', token)
+
+      navigate(from, {
+        replace: true,
+      })
+    } catch (err) {
+      setError('Ошибка при регистрации')
+    }
   }
 
   return (
@@ -74,7 +87,7 @@ export const Login = () => {
             color: theme.palette.text.primary,
           }}
         >
-          Вход в систему
+          Регистрация
         </Typography>
 
         {error && (
@@ -112,7 +125,10 @@ export const Login = () => {
           <Controller
             name="password"
             control={control}
-            rules={{ required: 'Обязательное поле' }}
+            rules={{
+              required: 'Обязательное поле',
+              minLength: { value: 5, message: 'Минимум 5 символов' },
+            }}
             render={({ field, fieldState: { error } }) => (
               <TextField
                 {...field}
@@ -126,6 +142,28 @@ export const Login = () => {
               />
             )}
           />
+
+          <Controller
+            name="confirmPassword"
+            control={control}
+            rules={{
+              required: 'Обязательное поле',
+              validate: (value) => value === watch('password') || 'Пароли не совпадают',
+            }}
+            render={({ field, fieldState: { error } }) => (
+              <TextField
+                {...field}
+                label="Подтвердите пароль"
+                type="password"
+                variant="outlined"
+                size="small"
+                error={!!error}
+                helperText={error?.message}
+                fullWidth
+              />
+            )}
+          />
+
           <Link
             component={RouterLink}
             sx={{
@@ -136,10 +174,10 @@ export const Login = () => {
               color: theme.palette.text.primary,
               fontWeight: 500,
             }}
-            to="/register"
+            to="/login"
             state={{ from: location.state?.from || { pathname: '/' } }}
           >
-            Ещё нет аккаунта? Зарегистрироваться
+            Уже есть аккаунт? Войти
           </Link>
 
           <Button
@@ -155,7 +193,7 @@ export const Login = () => {
               backgroundColor: '#6495ED',
             }}
           >
-            Войти
+            Зарегистрироваться
           </Button>
         </Box>
       </Box>

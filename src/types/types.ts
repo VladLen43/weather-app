@@ -53,3 +53,9 @@ export enum TabValues {
   MovingAvg = 'movingAvg',
   Line = 'line',
 }
+
+export interface User {
+  userName: string
+  password: string
+  token: string
+}
