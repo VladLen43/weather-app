@@ -8,8 +8,9 @@ import { JSX } from 'react'
 interface Props {
   handleOpen: (arg: boolean) => void
   open: boolean
+  message: string
 }
-export const Toast = ({ handleOpen, open }: Props): JSX.Element => {
+export const Toast = ({ handleOpen, open, message }: Props): JSX.Element => {
   const handleClose = (_: React.SyntheticEvent | Event, reason?: SnackbarCloseReason) => {
     if (reason === 'clickaway') {
       return
@@ -29,9 +30,5 @@ export const Toast = ({ handleOpen, open }: Props): JSX.Element => {
     </React.Fragment>
   )
 
-  return (
-    <div>
-      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose} message="Note archived" action={action} />
-    </div>
-  )
+  return <Snackbar open={open} autoHideDuration={6000} onClose={handleClose} message={message} action={action} />
 }

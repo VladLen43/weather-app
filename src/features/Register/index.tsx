@@ -41,7 +41,8 @@ export const Register = () => {
       return
     }
 
-    // сгенерировал хэш для пароля чтобы безопасно хранить его в localStorage
+    // Здесь мы генерируем хэш для пароля чтобы хранить его в localStorage
+    // Пароль хэшируется обычно не на стороне клиента, в идеале иметь бекенд который будет хэшировать наш пароль и отдавать токен
 
     try {
       const salt = await bcrypt.genSalt(10)
@@ -190,7 +191,7 @@ export const Register = () => {
               textTransform: 'none',
               fontSize: '1rem',
               borderRadius: '10px',
-              backgroundColor: '#6495ED',
+              backgroundColor: theme.palette.primary.dark,
             }}
           >
             Зарегистрироваться

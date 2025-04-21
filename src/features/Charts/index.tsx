@@ -17,6 +17,7 @@ export const Charts = () => {
       } = await getWeatherData('Moscow')
       const transformedData = transformForecastData(list)
       setWeatherData(transformedData)
+      setShowToast(true)
     } catch (error) {
       setShowToast(true)
     } finally {
@@ -35,7 +36,7 @@ export const Charts = () => {
   return (
     <>
       <WeatherCharts data={weatherData} />
-      {showToast && <Toast open={showToast} handleOpen={setShowToast} />}
+      {showToast && <Toast open={showToast} message="Не удалось загрузить данные о погоде" handleOpen={setShowToast} />}
     </>
   )
 }

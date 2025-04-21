@@ -12,8 +12,6 @@ const fetchData = async <T extends A>(url: string) => {
   return data
 }
 
-console.log(import.meta.env.API_KEY)
-
 export const getWeatherData = async (city: string) => {
   const [current, forecast] = await Promise.all([
     fetchData<CurrentWeatherResponse>(
