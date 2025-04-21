@@ -17,7 +17,6 @@ export const Charts = () => {
       } = await getWeatherData('Moscow')
       const transformedData = transformForecastData(list)
       setWeatherData(transformedData)
-      setShowToast(true)
     } catch (error) {
       setShowToast(true)
     } finally {
